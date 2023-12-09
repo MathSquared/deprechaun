@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Callable, NamedTuple, Tuple
+from typing import Callable, NamedTuple, Tuple, TYPE_CHECKING
 
-from deprechaun.method import DepreciationMethod
+if TYPE_CHECKING:
+    from deprechaun.method import DepreciationMethod
 
 
 class Asset(NamedTuple):
     basis: Decimal
     life: Decimal
-    method: DepreciationMethod
+    method: 'DepreciationMethod'

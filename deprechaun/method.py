@@ -21,4 +21,4 @@ def straight_line(asset: Asset, period: Decimal = ONE) -> Tuple[Decimal, Asset]:
         rbasis = asset.basis - dep
         rlife = asset.life - period
         ret = Asset(basis=rbasis, life=rlife, method=asset.method)
-    return ret
+    return dep, ret
