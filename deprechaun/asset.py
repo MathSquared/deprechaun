@@ -32,7 +32,7 @@ class Asset(NamedTuple):
 
         Generally, calls the asset's method attribute with the provided period. The depreciation method's return value is the depreciation value returned from this method. The returned asset is a new asset with the basis deducted by the depreciation value and the life deducted by the provided period.
 
-        This method will not depreciate the asset beyond its useful life. If the period is greater than or equal to the asset's remaining life, the depreciation method is called using the remaining life as the depreciation period, and the returned asset will have its basis and life both set to zero.
+        This method will not depreciate the asset beyond its useful life. If the period is greater than or equal to the asset's remaining life, the depreciation method is called using the remaining life as the depreciation period, and the returned asset will have its life set to zero.
 
         If the asset's precision is not None, the return value of the depreciation method is rounded to ``10**precision``, with the ``ROUND_HALF_UP`` rounding method, before it is subtracted from the basis. Thus, if the asset's original basis is specified only within the given precision, fractional cents will be allocated to one or another year, and the sum of the rounded depreciation values will equal the original basis.
 
@@ -42,15 +42,10 @@ class Asset(NamedTuple):
         Returns:
             Tuple[Decimal, Asset]: The amount of depreciation, and a new asset with a basis equal to this asset's basis less the depreciation amount, a life equal to this asset's life less the depreciation period (but no less than zero), and the same method as this asset.
         """
-        if period < self.life:
-            dep = self.method(self, period=period)
-            if self.precision is not None:
-                dep = dep.quantize(Decimal(10)**self.precision, ROUND_HALF_UP)
-            rbasis = self.basis - dep
-            rlife = self.life - period
-            return dep, Asset(basis=rbasis, life=rlife, method=self.method)
-        else:
-            dep = self.method(self, period=self.life)
-            if self.precision is not None:
-                dep = dep.quantize(Decimal(10)**self.precision, ROUND_HALF_UP)
-            return dep, Asset(basis=_ZERO, life=_ZERO, method=self.method)
+        period = min(period, self.life)
+        dep = self.method(self, period=period)
+        if self.precision is not None:
+            dep = dep.quantize(Decimal(10)**self.precision, ROUND_HALF_UP)
+        rbasis = self.basis - dep
+        rlife = self.life - period
+        return dep, Asset(basis=rbasis, life=rlife, method=self.method)
