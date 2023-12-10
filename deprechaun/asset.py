@@ -1,8 +1,12 @@
 from decimal import Decimal
-from typing import NamedTuple, TYPE_CHECKING
+from typing import NamedTuple, Tuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from deprechaun.method import DepreciationMethod
+
+
+_ZERO: Decimal = Decimal('0')
+_ONE: Decimal = Decimal('1')
 
 
 class Asset(NamedTuple):
@@ -20,3 +24,25 @@ class Asset(NamedTuple):
     basis: Decimal
     life: Decimal
     method: 'DepreciationMethod'
+
+    def depreciate(self, period: Decimal = _ONE) -> Tuple[Decimal, 'Asset']:
+        """Depreciates the asset using its configured depreciation method.
+
+        Generally, calls the asset's method attribute with the provided period. The depreciation method's return value is the depreciation value returned from this method. The returned asset is a new asset with the basis deducted by the depreciation value and the life deducted by the provided period.
+
+        This method will not depreciate the asset beyond its useful life. If the period is greater than the asset's remaining life, the depreciation method is called using the remaining life as the depreciation period, and the returned asset will have its basis and life both set to zero.
+
+        Args:
+            period (Decimal): The period over which to depreciate the asset. For example, for the year the asset was placed in service, this could reflect the time during the year that it was placed in service, or the convention used for depreciation.
+
+        Returns:
+            Tuple[Decimal, Asset]: The amount of depreciation, and a new asset with a basis equal to this asset's basis less the depreciation amount, a life equal to this asset's life less the depreciation period (but no less than zero), and the same method as this asset.
+        """
+        if period < self.life:
+            dep = self.method(self, period=period)
+            rbasis = self.basis - dep
+            rlife = self.life - period
+            return dep, Asset(basis=rbasis, life=rlife, method=self.method)
+        else:
+            dep = self.method(self, period=self.life)
+            return dep, Asset(basis=_ZERO, life=_ZERO, method=self.method)
