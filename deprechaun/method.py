@@ -13,7 +13,7 @@ class DepreciationMethod(Protocol):
 
     Functions with this protocol implement various depreciation methods. The interface for all such methods is given here.
 
-    These functions will not depreciate an asset beyond its useful life. If the period is greater than the asset's remaining life, the asset will be depreciated over its remaining useful life.
+    These functions will not depreciate an asset beyond its useful life. If the period is greater than or equal to the asset's remaining life, the asset will be depreciated over its remaining useful life.
 
     Args:
         asset (Asset): The asset to depreciate.

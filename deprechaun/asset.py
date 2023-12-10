@@ -32,7 +32,7 @@ class Asset(NamedTuple):
 
         Generally, calls the asset's method attribute with the provided period. The depreciation method's return value is the depreciation value returned from this method. The returned asset is a new asset with the basis deducted by the depreciation value and the life deducted by the provided period.
 
-        This method will not depreciate the asset beyond its useful life. If the period is greater than the asset's remaining life, the depreciation method is called using the remaining life as the depreciation period, and the returned asset will have its basis and life both set to zero.
+        This method will not depreciate the asset beyond its useful life. If the period is greater than or equal to the asset's remaining life, the depreciation method is called using the remaining life as the depreciation period, and the returned asset will have its basis and life both set to zero.
 
         If the asset's precision is not None, the return value of the depreciation method is rounded to ``10**precision``, with the ``ROUND_HALF_UP`` rounding method, before it is subtracted from the basis. Thus, if the asset's original basis is specified only within the given precision, fractional cents will be allocated to one or another year, and the sum of the rounded depreciation values will equal the original basis.
 
