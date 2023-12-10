@@ -4,8 +4,7 @@ from typing import Protocol, Tuple
 from deprechaun.asset import Asset
 
 
-ONE: Decimal = Decimal('1')
-ZERO: Decimal = Decimal('0')
+_ONE: Decimal = Decimal('1')
 
 
 class DepreciationMethod(Protocol):
@@ -25,7 +24,7 @@ class DepreciationMethod(Protocol):
     def __call__(self, asset: Asset, period: Decimal = ...) -> Decimal: ...
 
 
-def straight_line(asset: Asset, period: Decimal = ONE) -> Decimal:
+def straight_line(asset: Asset, period: Decimal = _ONE) -> Decimal:
     """The straight-line depreciation method.
 
     See IRS, "How to Depreciate Property," Publication 946 (2022), 39. Note that salvage value is not supported.
@@ -55,7 +54,7 @@ def declining_balance_only(rate: int | str | Decimal) -> DepreciationMethod:
     if rate in _DECLINING_BALANCE_ONLY_MEMO:
         return _DECLINING_BALANCE_ONLY_MEMO[rate]
     else:
-        def declining_balance_only_impl(asset: Asset, period: Decimal = ONE) -> Decimal:
+        def declining_balance_only_impl(asset: Asset, period: Decimal = _ONE) -> Decimal:
             return asset.basis * rate / 100 * min(period, asset.life)
         _DECLINING_BALANCE_ONLY_MEMO[rate] = declining_balance_only_impl
         return declining_balance_only_impl
@@ -78,7 +77,7 @@ def declining_balance_macrs(rate: int | str | Decimal) -> DepreciationMethod:
     if rate in _DECLINING_BALANCE_MACRS_MEMO:
         return _DECLINING_BALANCE_MACRS_MEMO[rate]
     else:
-        def declining_balance_macrs_impl(asset: Asset, period: Decimal = ONE) -> Decimal:
+        def declining_balance_macrs_impl(asset: Asset, period: Decimal = _ONE) -> Decimal:
             return max(straight_line(asset, period), declining_balance_only(rate)(asset, period))
         _DECLINING_BALANCE_MACRS_MEMO[rate] = declining_balance_macrs_impl
         return declining_balance_macrs_impl
