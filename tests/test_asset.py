@@ -27,3 +27,9 @@ class TestAsset(unittest.TestCase):
         _, b = a.depreciate()
         mock_method.assert_called_with(a, period=Decimal('0.5'))
         self.assertEqual(Asset(Decimal('0'), Decimal('0'), mock_method), b)
+
+    def test_depreciate_round(self):
+        a = Asset(Decimal('1'), Decimal('3'), straight_line, -2)
+        dep, b = a.depreciate()
+        self.assertEqual(Decimal('0.33'), dep)
+        self.assertEqual(Asset(Decimal('0.67'), Decimal('2'), straight_line), b)
