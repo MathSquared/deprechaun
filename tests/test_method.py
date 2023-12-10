@@ -25,9 +25,10 @@ class TestStraightLine(unittest.TestCase):
 
 
 class TestDecliningBalanceOnly(unittest.TestCase):
-    def test_memo(self):
+    def test_memo_and_rate_type(self):
         self.assertEqual(declining_balance_only(200), declining_balance_only(200))
         self.assertEqual(declining_balance_only(200), declining_balance_only(Decimal('200')))
+        self.assertEqual(declining_balance_only(200), declining_balance_only('200'))
         self.assertNotEqual(declining_balance_only(200), declining_balance_only(150))
 
     def test_whole_year(self):
@@ -43,9 +44,10 @@ class TestDecliningBalanceOnly(unittest.TestCase):
 
 
 class TestDecliningBalanceMacrs(unittest.TestCase):
-    def test_memo(self):
+    def test_memo_and_rate_type(self):
         self.assertEqual(declining_balance_macrs(200), declining_balance_macrs(200))
         self.assertEqual(declining_balance_macrs(200), declining_balance_macrs(Decimal('200')))
+        self.assertEqual(declining_balance_macrs(200), declining_balance_macrs('200'))
         self.assertNotEqual(declining_balance_macrs(200), declining_balance_macrs(150))
 
     def test_hy_5(self):

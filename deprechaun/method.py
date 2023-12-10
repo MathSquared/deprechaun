@@ -38,7 +38,7 @@ def straight_line(asset: Asset, period: Decimal = ONE) -> Decimal:
 
 _DECLINING_BALANCE_ONLY_MEMO: dict[Decimal, DepreciationMethod] = {}
 
-def declining_balance_only(rate: int | Decimal) -> DepreciationMethod:
+def declining_balance_only(rate: int | str | Decimal) -> DepreciationMethod:
     """Returns a function for the declining-balance depreciation method, without switching to straight-line.
 
     See IRS, "How to Depreciate Property," Publication 946 (2022), 38-39. Note that salvage value is not supported.
@@ -46,7 +46,7 @@ def declining_balance_only(rate: int | Decimal) -> DepreciationMethod:
     If you are using MACRS, this is probably not what you're looking for, since MACRS requires switching to the straight-line method when it returns an equal or greater deduction. Instead, use ``declining_balance_macrs``.
 
     Args:
-        rate (int | Decimal): The declining-balance rate, **in percent** (so call ``declining_balance_only(40)`` for 40%). This is the declining-balance percentage **divided by the useful life of the property**.
+        rate (int | str | Decimal): The declining-balance rate, **in percent** (so call ``declining_balance_only(40)`` for 40%). This is the declining-balance percentage **divided by the useful life of the property**.
 
     Returns:
         DepreciationMethod: A function implementing the declining-balance depreciation method for the given rate. This will be the same function for the same rate.
@@ -63,13 +63,13 @@ def declining_balance_only(rate: int | Decimal) -> DepreciationMethod:
 
 _DECLINING_BALANCE_MACRS_MEMO: dict[Decimal, DepreciationMethod] = {}
 
-def declining_balance_macrs(rate: int | Decimal) -> DepreciationMethod:
+def declining_balance_macrs(rate: int | str | Decimal) -> DepreciationMethod:
     """Returns a function for the declining-balance depreciation method, switching to straight-line when it produces an equal or greater deduction.
 
     See IRS, "How to Depreciate Property," Publication 946 (2022), 38-39. Note that salvage value is not supported.
 
     Args:
-        rate (int | Decimal): The declining-balance rate, **in percent** (so call ``declining_balance_macrs(40)`` for 40%). This is the declining-balance percentage **divided by the recovery period of the property**.
+        rate (int | str | Decimal): The declining-balance rate, **in percent** (so call ``declining_balance_macrs(40)`` for 40%). This is the declining-balance percentage **divided by the recovery period of the property**.
 
     Returns:
         DepreciationMethod: A function implementing the declining-balance MACRS depreciation method for the given rate. This will be the same function for the same rate.
