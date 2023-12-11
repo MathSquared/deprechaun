@@ -52,6 +52,58 @@ class TestTimeSystem(unittest.TestCase):
             time_system_hydrate([a]),
         )
 
+        # Non-leap-year February
+        a = self.base._replace(
+            acquired=date(2023, 3, 1),
+            system_data=self.base.system_data._replace(offset=TimeSystemOffsetSubstitute.DAY),
+        )
+        self.assertEqual(
+            [self.base._replace(
+                acquired=date(2023, 3, 1),
+                system_data=self.base.system_data._replace(offset=Decimal(31 + 28) / 365),
+            )],
+            time_system_hydrate([a]),
+        )
+
+        # Leap-year February
+        a = self.base._replace(
+            acquired=date(2024, 3, 1),
+            system_data=self.base.system_data._replace(offset=TimeSystemOffsetSubstitute.DAY),
+        )
+        self.assertEqual(
+            [self.base._replace(
+                acquired=date(2024, 3, 1),
+                system_data=self.base.system_data._replace(offset=Decimal(31 + 29) / 366),
+            )],
+            time_system_hydrate([a]),
+        )
+
+        # Non-leap-year February :)
+        a = self.base._replace(
+            acquired=date(2100, 3, 1),
+            system_data=self.base.system_data._replace(offset=TimeSystemOffsetSubstitute.DAY),
+        )
+        self.assertEqual(
+            [self.base._replace(
+                acquired=date(2100, 3, 1),
+                system_data=self.base.system_data._replace(offset=Decimal(31 + 28) / 365),
+            )],
+            time_system_hydrate([a]),
+        )
+
+        # Leap-year February :))
+        a = self.base._replace(
+            acquired=date(2000, 3, 1),
+            system_data=self.base.system_data._replace(offset=TimeSystemOffsetSubstitute.DAY),
+        )
+        self.assertEqual(
+            [self.base._replace(
+                acquired=date(2000, 3, 1),
+                system_data=self.base.system_data._replace(offset=Decimal(31 + 29) / 366),
+            )],
+            time_system_hydrate([a]),
+        )
+
     def test_hydrate_month(self):
         a = self.base._replace(
             system_data=self.base.system_data._replace(offset=TimeSystemOffsetSubstitute.MONTH),
