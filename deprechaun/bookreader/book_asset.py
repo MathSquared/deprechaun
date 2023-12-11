@@ -12,7 +12,7 @@ class BookAsset(NamedTuple):
         basis_start (Decimal): The adjusted basis in the asset when it was placed in service.
         basis_impairment (list[Decimal]): The depreciation deductions for this asset in each year, beginning with the year the asset was placed in service, and stored as negative numbers.
         basis_adjustment (list[Decimal]): Any other changes in the asset's basis during the year, starting from when it was placed in service.
-        system (str): The depreciation system used for the asset, which provides the specific method of computing a depreciation allowance for this kind of asset.
+        system (str): The depreciation system used for the asset, which provides the specific method of computing a depreciation allowance for this kind of asset. This should be one of the system names registered using ``register_system``.
         system_data (Any): Any data used for the depreciation system. The format of this data will depend on the depreciation system.
         long_name (str | None): A long name for the asset, which provides a fuller description.
         placed_in_service (date | None): The date the asset was placed in service. ``None`` means it was placed in service immediately when acquired.
