@@ -18,6 +18,7 @@ class BookAsset(NamedTuple):
         placed_in_service (date | None): The date the asset was placed in service. ``None`` means it was placed in service immediately when acquired.
         disposed (date | None): The date the asset was disposed of. ``None`` means the asset has not been disposed of.
         salvage (Decimal): The salvage value of the asset, if any.
+        precision (int | None): The exponent to which to round all depreciation values, or None to use exact values (as far as the thread's decimal context will allow). For example, ``-2`` to round to the nearest cent.
     """
     name: str
     acquired: date
@@ -30,6 +31,7 @@ class BookAsset(NamedTuple):
     placed_in_service: date | None = None
     disposed: date | None = None
     salvage: Decimal = Decimal('0')
+    precision: int | None = None
 
     @property
     def display_name(self) -> str:
