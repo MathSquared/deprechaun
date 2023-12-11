@@ -2,8 +2,6 @@ from datetime import date
 from decimal import Decimal
 from typing import Any, NamedTuple
 
-from .systems import SystemData
-
 
 class BookAsset(NamedTuple):
     """An asset recorded on the accounting books.
@@ -15,7 +13,7 @@ class BookAsset(NamedTuple):
         basis_impairment (list[Decimal]): The depreciation deductions for this asset in each year, beginning with the year the asset was placed in service, and stored as negative numbers.
         basis_adjustment (list[Decimal]): Any other changes in the asset's basis during the year, starting from when it was placed in service.
         system (str): The depreciation system used for the asset, which provides the specific method of computing a depreciation allowance for this kind of asset.
-        system_data (SystemData): Any data used for the depreciation system. The format of this data will depend on the depreciation system.
+        system_data (Any): Any data used for the depreciation system. The format of this data will depend on the depreciation system.
         long_name (str | None): A long name for the asset, which provides a fuller description.
         placed_in_service (date | None): The date the asset was placed in service. ``None`` means it was placed in service immediately when acquired.
         disposed (date | None): The date the asset was disposed of. ``None`` means the asset has not been disposed of.
@@ -27,7 +25,7 @@ class BookAsset(NamedTuple):
     basis_impairment: list[Decimal]
     basis_adjustment: list[Decimal]
     system: str
-    system_data: SystemData
+    system_data: Any
     long_name: str | None = None
     placed_in_service: date | None = None
     disposed: date | None = None
